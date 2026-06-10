@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>front-adam 80303</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-animation"></div>
+
+  <main class="app">
+    <header class="topbar hidden" id="topbar">
+      <div>
+        <h1>front-adam 80303</h1>
+        <p>Mini portal pracy: Pracuj.pl + Tinder</p>
+      </div>
+      <div class="user-box">
+        <span id="loggedUserText"></span>
+        <button id="logoutBtn" class="btn btn-dark">Wyloguj</button>
+      </div>
+    </header>
+
+    <section class="card auth-card" id="authSection">
+      <h2>Rejestracja / Logowanie</h2>
+      <p class="muted">Utwórz konto, aby korzystać z kreatora CV i ofert pracy.</p>
+      <div class="form-grid">
+        <input id="loginInput" placeholder="Login / imię i nazwisko" autocomplete="off" />
+        <input id="passwordInput" type="password" placeholder="Hasło" autocomplete="off" />
+      </div>
+      <div class="buttons-row">
+        <button id="registerBtn" class="btn btn-primary">Zarejestruj</button>
+        <button id="loginBtn" class="btn btn-secondary">Zaloguj</button>
+      </div>
+      <p id="authMessage" class="message"></p>
+    </section>
+
+    <section class="dashboard hidden" id="dashboard">
+      <section class="welcome-panel slide-in">
+        <h2 id="welcomeTitle">Witaj</h2>
+        <p>Twoje dane są przypisane do konta. Możesz wrócić do poprzednich CV i je poprawić.</p>
+        <div class="stats">
+          <div><strong id="cvCount">0</strong><span>CV</span></div>
+          <div><strong id="matchCount">0</strong><span>Dopasowań</span></div>
+          <div><strong id="noteCount">0</strong><span>Notatek</span></div>
+        </div>
+      </section>
+
+      <section class="card note-card">
+        <h2>Notatnik</h2>
+        <p class="muted">Notatki zapisują się osobno dla aktualnego użytkownika.</p>
+        <textarea id="notesArea" placeholder="Wpisz notatki, pomysły albo listę zadań..."></textarea>
+        <button id="saveNotesBtn" class="btn btn-secondary full">Zapisz notatkę</button>
+        <div id="notesList" class="list"></div>
+      </section>
+
+      <section class="card cv-card">
+        <h2>Kreator CV</h2>
+        <p class="muted">Możesz zapisać kilka wersji CV i wrócić do edycji później.</p>
+        <div class="form-grid">
+          <input id="cvName" placeholder="Nazwa CV, np. Front-End Junior" />
+          <input id="cvPosition" placeholder="Stanowisko, np. Frontend Developer" />
+          <input id="cvSkills" placeholder="Umiejętności, np. HTML, CSS, JavaScript" />
+        </div>
+        <textarea id="cvDescription" placeholder="Krótki opis doświadczenia"></textarea>
+        <button id="saveCvBtn" class="btn btn-accent full">Zapisz CV</button>
+        <h3>Moje zapisane CV</h3>
+        <div id="cvList" class="list"></div>
+      </section>
+
+      <section class="card jobs-card">
+        <h2>Oferty pracy</h2>
+        <p class="muted">Dopasuj oferty jak w aplikacji randkowej: odrzuć albo zaakceptuj.</p>
+        <div id="jobCard" class="job-card"></div>
+        <div class="buttons-row center">
+          <button id="rejectJobBtn" class="btn btn-danger">Odrzuć</button>
+          <button id="acceptJobBtn" class="btn btn-success">Dopasuj</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
