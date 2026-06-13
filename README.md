@@ -64,8 +64,6 @@ Warstwa DB jest oddzielona od frontendu. Backend łączy się z PostgreSQL po co
    copy .env.example .env
    ```
 
-   (Linux/macOS: `cp .env.example .env`)
-
 2. Uruchom kontener z bazą:
 
    ```bash
@@ -123,18 +121,3 @@ docker compose down
 # zatrzymanie + usunięcie danych (schema i seed załadują się od nowa)
 docker compose down -v
 ```
-
-### Przykładowe zapytania w psql
-
-```sql
-SELECT * FROM job_offers;
-SELECT u.login, c.name, c.position FROM cvs c JOIN users u ON u.id = c.user_id;
-SELECT u.login, j.title, m.matched_at FROM matches m
-  JOIN users u ON u.id = m.user_id
-  JOIN job_offers j ON j.id = m.job_id;
-```
-
-### Uwagi
-
-- Skrypty z `db/init/` uruchamiają się tylko przy **pierwszym** utworzeniu wolumenu. Po zmianie schematu: `docker compose down -v` i ponownie `up -d`.
-- Plik `.env` nie trafia do gita (hasła). W repo jest `.env.example` jako wzór.
