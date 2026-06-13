@@ -44,4 +44,97 @@ Projekt wdrożeniowy na zaliczenie studiów.
 
 4. `Ctrl + C` w terminalu zatrzymuje serwer.
 
-5. Wszystkie dane zapisują się w folderze `data`.
+5. Wszystkie dane zapisują się w folderze `data` (frontend + backup plikowy).
+
+---
+
+## Baza danych (PostgreSQL + Docker)
+
+Warstwa DB jest oddzielona od frontendu. Backend łączy się z PostgreSQL po connection stringu.
+
+### Wymagania
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (uruchomiony)
+
+### Pierwsze uruchomienie
+
+1. Skopiuj plik konfiguracyjny:
+
+   ```bash
+   copy .env.example .env
+   ```
+
+   (Linux/macOS: `cp .env.example .env`)
+
+2. Uruchom kontener z bazą:
+
+   ```bash
+   docker compose up -d
+   ```
+
+3. Sprawdź, czy baza działa:
+
+   ```bash
+   docker compose ps
+   ```
+
+   Status powinien być `healthy`.
+
+### Połączenie (dla backendu)
+
+| Parametr | Wartość (domyślna z `.env.example`) |
+|----------|---------------------------------------|
+| Host     | `localhost` (z komputera) / `postgres` (z kontenera) |
+| Port     | `5432` |
+| Baza     | `projekt_wdrozeniowy` |
+| User     | `projekt_app` |
+| Hasło    | `projekt_pass` |
+
+Connection string:
+
+```
+postgresql://projekt_app:projekt_pass@localhost:5432/projekt_wdrozeniowy
+```
+
+### Schemat tabel
+
+| Tabela | Opis |
+|--------|------|
+| `users` | konta użytkowników |
+| `cvs` | zapisane CV |
+| `notes` | notatki |
+| `job_offers` | oferty pracy |
+| `matches` | zaakceptowane dopasowania |
+
+Pliki SQL: `db/init/01_schema.sql`, `db/init/02_seed.sql` — wykonują się **automatycznie** przy pierwszym starcie kontenera.
+
+### Przydatne komendy
+
+```bash
+# logi bazy
+docker compose logs -f postgres
+
+# wejście do psql w kontenerze
+docker compose exec postgres psql -U projekt_app -d projekt_wdrozeniowy
+
+# zatrzymanie
+docker compose down
+
+# zatrzymanie + usunięcie danych (schema i seed załadują się od nowa)
+docker compose down -v
+```
+
+### Przykładowe zapytania w psql
+
+```sql
+SELECT * FROM job_offers;
+SELECT u.login, c.name, c.position FROM cvs c JOIN users u ON u.id = c.user_id;
+SELECT u.login, j.title, m.matched_at FROM matches m
+  JOIN users u ON u.id = m.user_id
+  JOIN job_offers j ON j.id = m.job_id;
+```
+
+### Uwagi
+
+- Skrypty z `db/init/` uruchamiają się tylko przy **pierwszym** utworzeniu wolumenu. Po zmianie schematu: `docker compose down -v` i ponownie `up -d`.
+- Plik `.env` nie trafia do gita (hasła). W repo jest `.env.example` jako wzór.
